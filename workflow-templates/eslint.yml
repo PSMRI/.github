@@ -32,6 +32,7 @@ jobs:
           git diff --name-only origin/${{ github.base_ref }}...${{ github.sha }} > changed_files.txt
           cat changed_files.txt
 
+
       # Run linter only on changed JavaScript/TypeScript files
       - name: Run linter on changed JavaScript/TypeScript files
         run: |
