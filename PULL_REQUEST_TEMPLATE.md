@@ -11,7 +11,7 @@ Please provide a summary of the change and the motivation behind it. Include rel
 - [ ] 🐞 **Bug fix** (non-breaking change which fixes an issue)
 - [ ] ✨ **New feature** (non-breaking change which adds functionality)
 - [ ] 🔥 **Breaking change** (fix or feature that would cause existing functionality to not work as expected)
-- [ ] 🛠 **Reefactor** (change that is neither a fix nor a new feature)
+- [ ] 🛠 **Refactor** (change that is neither a fix nor a new feature)
 - [ ] ⚙️  **Config change** (configuration file or build script updates)
 - [ ] 📚 **Documentation** (updates to docs or readme)
 - [ ] 🧪 **Tests** (adding new or updating existing tests)
