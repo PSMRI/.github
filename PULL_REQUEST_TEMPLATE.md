@@ -8,7 +8,7 @@ Please provide a summary of the change and the motivation behind it. Include rel
 
 ## ✅ Type of Change
 
-- [ ] 🐞 **Bug fix** (non-breaking change which fixes an issue)
+- [ ] 🐞 **Bug fix** (non-breaking change which resolves an issue)
 - [ ] ✨ **New feature** (non-breaking change which adds functionality)
 - [ ] 🔥 **Breaking change** (fix or feature that would cause existing functionality to not work as expected)
 - [ ] 🛠 **Refactor** (change that is neither a fix nor a new feature)
