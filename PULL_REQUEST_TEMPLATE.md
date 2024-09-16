@@ -12,7 +12,7 @@ Please provide a summary of the change and the motivation behind it. Include rel
 - [ ] ✨ **New feature** (non-breaking change which adds functionality)
 - [ ] 🔥 **Breaking change** (fix or feature that would cause existing functionality to not work as expected)
 - [ ] 🛠 **Refactor** (change that is neither a fix nor a new feature)
-- [ ] ⚙️  **Config change** (configuration file or build script updates)
+- [ ] ⚙️ **Config change** (configuration file or build script updates)
 - [ ] 📚 **Documentation** (updates to docs or readme)
 - [ ] 🧪 **Tests** (adding new or updating existing tests)
 - [ ] 🎨 **UI/UX** (changes that affect the user interface)
