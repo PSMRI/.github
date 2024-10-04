@@ -1,0 +1,20 @@
+{
+    "name": "Lint and Audit",
+    "description": "This template runs ESLint to check for linting errors and npm audit to check for vulnerabilities in dependencies.",
+    "iconName": "octicon-check",
+    "categories": [
+        "JavaScript",
+        "TypeScript",
+        "Security"
+    ],
+    "filePatterns": {
+        "eslint": [
+            "src/**/*.js",
+            "src/**/*.ts"
+        ],
+        "npm_audit": [
+            "package.json$",
+            "package-lock.json$"
+        ]
+    }
+}
