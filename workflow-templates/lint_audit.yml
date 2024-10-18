@@ -1,0 +1,85 @@
+name: ESLint and NPM audit
+
+on:
+  workflow_call:
+  push:
+    branches: [main, master, develop]
+  pull_request:
+    branches: [main, master, develop]
+    paths:
+      - 'package.json'
+      - 'package-lock.json'
+
+jobs:
+  lint-and-audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      # Set up Node.js environment
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      # Cache npm dependencies to speed up installation
+      - name: Cache npm dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: ${{ runner.OS }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.OS }}-node-
+      
+      # Install project dependencies
+      - name: Install dependencies
+        run: |
+          npm config set legacy-peer-deps true
+          npm install
+
+      # Get the list of changed files in the PR
+      - name: Get list of changed files
+        id: changed-files
+        run: |
+          if [ "${{ github.event_name }}" == "pull_request" ]; then
+            git fetch origin ${{ github.base_ref }}
+            git diff --name-only origin/${{ github.base_ref }}...${{ github.sha }} > changed_files.txt
+          else
+            git diff --name-only ${{ github.event.before }} ${{ github.sha }} > changed_files.txt
+          fi
+          cat changed_files.txt
+
+      # Run linter only on changed JavaScript/TypeScript files
+      - name: Run linter on changed JavaScript/TypeScript files
+        run: |
+          CHANGED_FILES=$(cat changed_files.txt | grep '\.js\|\.jsx\|\.ts\|\.tsx' || true)
+          if [ -n "$CHANGED_FILES" ]; then
+            echo "Linting the following files:"
+            echo "$CHANGED_FILES"
+            npx eslint $CHANGED_FILES
+          else
+            echo "No JavaScript/TypeScript files to lint."
+          fi
+
+      # Run npm audit
+      - name: Run npm audit (Allow skipping unfixed vulnerabilities)
+        run: npm audit
+        continue-on-error: true
+
+      - name: Check for fixable vulnerabilities
+        run: |
+          npm audit --json > audit-report.json
+          FIXABLE=$(grep -c '"fixAvailable": true' audit-report.json)
+          if [ "$FIXABLE" -gt 0 ]; then
+            echo "$FIXABLE fixable vulnerabilities found."
+            exit 1  # Block PR if there are fixable vulnerabilities
+          else
+            echo "No fixable vulnerabilities found."
+          fi
+
+      # Upload the npm audit report as an artifact
+      - name: Upload npm audit report
+        uses: actions/upload-artifact@v3
+        with:
+          name: npm-audit-report
+          path: audit-report.json
