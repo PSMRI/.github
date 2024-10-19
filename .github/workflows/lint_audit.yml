@@ -30,27 +30,34 @@ jobs:
           key: ${{ runner.OS }}-node-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
             ${{ runner.OS }}-node-
-      
+
       # Install project dependencies
       - name: Install dependencies
         run: |
           npm config set legacy-peer-deps true
           npm install
 
-      # Get the list of changed files in the PR
+      # Get the list of changed files
       - name: Get list of changed files
         id: changed-files
         run: |
           if [ "${{ github.event_name }}" == "pull_request" ]; then
-            git fetch origin ${{ github.base_ref }}
-            git diff --name-only origin/${{ github.base_ref }}...${{ github.sha }} > changed_files.txt
+            git fetch origin ${{ github.base_ref }} || git fetch --unshallow
+            git diff --name-only origin/${{ github.base_ref }}...${{ github.sha }} > changed_files.txt || echo "Unable to determine changed files"
+          elif [ "${{ github.event_name }}" == "push" ]; then
+            git diff --name-only ${{ github.event.before }} ${{ github.sha }} > changed_files.txt || echo "Unable to determine changed files"
           else
-            git diff --name-only ${{ github.event.before }} ${{ github.sha }} > changed_files.txt
+            git diff --name-only HEAD~1 HEAD > changed_files.txt || echo "Unable to determine changed files"
           fi
-          cat changed_files.txt
+          if [ -s changed_files.txt ]; then
+            echo "Changed files:"
+            cat changed_files.txt
+          else
+            echo "No changed files found or unable to determine changes"
+          fi
 
-      # Run linter only on changed JavaScript/TypeScript files
-      - name: Run linter on changed JavaScript/TypeScript files
+      # Run linter on changed JavaScript/TypeScript files
+      - name: Run linter on JavaScript/TypeScript files
         run: |
           CHANGED_FILES=$(cat changed_files.txt | grep '\.js\|\.jsx\|\.ts\|\.tsx' || true)
           if [ -n "$CHANGED_FILES" ]; then
