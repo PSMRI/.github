@@ -42,8 +42,12 @@ jobs:
         id: changed-files
         run: |
           if [ "${{ github.event_name }}" == "pull_request" ]; then
+            echo "Pull Request detected"
+            echo "PR Head SHA: ${{ github.event.pull_request.head.sha }}"
+            echo "github.sha: ${{ github.sha }}"
             git fetch origin ${{ github.base_ref }} || git fetch --unshallow
-            git diff --name-only origin/${{ github.base_ref }}...${{ github.sha }} > changed_files.txt || echo "Unable to determine changed files"
+            git fetch origin ${{ github.event.pull_request.head.sha }} || git fetch --unshallow
+            git diff --name-only origin/${{ github.base_ref }}...${{ github.event.pull_request.head.sha }} > changed_files.txt || echo "Unable to determine changed files"
           elif [ "${{ github.event_name }}" == "push" ]; then
             git diff --name-only ${{ github.event.before }} ${{ github.sha }} > changed_files.txt || echo "Unable to determine changed files"
           else
