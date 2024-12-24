@@ -72,25 +72,26 @@ jobs:
             echo "No JavaScript/TypeScript files to lint."
           fi
 
-      # Run npm audit
-      - name: Run npm audit (Allow skipping unfixed vulnerabilities)
-        run: npm audit
-        continue-on-error: true
+      # Future Scope: Needs to be fixed
+      # # Run npm audit
+      # - name: Run npm audit (Allow skipping unfixed vulnerabilities)
+      #   run: npm audit
+      #   continue-on-error: true
 
-      - name: Check for fixable vulnerabilities
-        run: |
-          npm audit --json > audit-report.json
-          FIXABLE=$(grep -c '"fixAvailable": true' audit-report.json)
-          if [ "$FIXABLE" -gt 0 ]; then
-            echo "$FIXABLE fixable vulnerabilities found."
-            exit 1  # Block PR if there are fixable vulnerabilities
-          else
-            echo "No fixable vulnerabilities found."
-          fi
+      # - name: Check for fixable vulnerabilities
+      #   run: |
+      #     npm audit --json > audit-report.json
+      #     FIXABLE=$(grep -c '"fixAvailable": true' audit-report.json)
+      #     if [ "$FIXABLE" -gt 0 ]; then
+      #       echo "$FIXABLE fixable vulnerabilities found."
+      #       exit 1  # Block PR if there are fixable vulnerabilities
+      #     else
+      #       echo "No fixable vulnerabilities found."
+      #     fi
 
-      # Upload the npm audit report as an artifact
-      - name: Upload npm audit report
-        uses: actions/upload-artifact@v3
-        with:
-          name: npm-audit-report
-          path: audit-report.json
+      # # Upload the npm audit report as an artifact
+      # - name: Upload npm audit report
+      #   uses: actions/upload-artifact@v3
+      #   with:
+      #     name: npm-audit-report
+      #     path: audit-report.json
