@@ -7,8 +7,8 @@ on:
   pull_request:
     branches: [main, master, develop]
     paths:
-      - 'package.json'
-      - 'package-lock.json'
+      - "package.json"
+      - "package-lock.json"
 
 jobs:
   lint-and-audit:
@@ -20,7 +20,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '18'
+          node-version: "18"
 
       # Cache npm dependencies to speed up installation
       - name: Cache npm dependencies
@@ -63,7 +63,7 @@ jobs:
       # Run linter on changed JavaScript/TypeScript files
       - name: Run linter on JavaScript/TypeScript files
         run: |
-          CHANGED_FILES=$(cat changed_files.txt | grep '\.js\|\.jsx\|\.ts\|\.tsx' || true)
+          CHANGED_FILES=$(cat changed_files.txt | grep -E '\.js$|\.jsx$|\.ts$|\.tsx$' || true)
           if [ -n "$CHANGED_FILES" ]; then
             echo "Linting the following files:"
             echo "$CHANGED_FILES"
