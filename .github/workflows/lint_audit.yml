@@ -63,7 +63,7 @@ jobs:
       # Run linter on changed JavaScript/TypeScript files
       - name: Run linter on JavaScript/TypeScript files
         run: |
-          CHANGED_FILES=$(cat changed_files.txt | grep -E '\.js$|\.jsx$|\.ts$|\.tsx$' | grep -vE 'package-lock\.json$|package\.json$' || true)
+          CHANGED_FILES=$(cat changed_files.txt | grep -E '\.js$|\.jsx$|\.ts$|\.tsx$' || true)
           if [ -n "$CHANGED_FILES" ]; then
             echo "Linting the following files:"
             echo "$CHANGED_FILES"
