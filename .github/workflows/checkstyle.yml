@@ -1,11 +1,17 @@
-name: Checkstyle
-on: 
-  
-  pull_request:
-    branches: ["master", "develop"]
-    paths:
-      - '**/*.java'  # Monitor all Java files in all derectories
+name: Reusable Checkstyle
 
+on: 
+  workflow_call:
+    inputs:
+      java-version:
+        required: false
+        type: string
+        default: '17'
+      branches:
+        required: false
+        type: string
+        default: '["master", "develop"]'
+  
 jobs:
   checkstyle:
     runs-on: ubuntu-latest
