@@ -7,10 +7,6 @@ on:
         required: false
         type: string
         default: '17'
-      branches:
-        required: false
-        type: string
-        default: '["master", "develop"]'
   
 jobs:
   checkstyle:
