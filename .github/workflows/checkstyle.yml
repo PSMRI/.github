@@ -46,7 +46,12 @@ jobs:
       - name: Run Checkstyle on Changed Files
         if: steps.changed-files.outputs.any_changed == 'true'
         run: |
-         mvn checkstyle:check -Dcheckstyle.includes="${{ steps.changed-files.outputs}}"
+         echo "${{ steps.changed-files.outputs.all_changed_files }}" > changed_files.txt
+          mvn checkstyle:check \
+            -Dcheckstyle.config.location=checkstyle.xml \
+            -Dcheckstyle.includeResources=false \
+            -Dcheckstyle.includeTestResources=false \
+            -Dcheckstyle.includes=@changed_files.txt
 
       - name: Block PR on Checkstyle Failure
         if: failure()
